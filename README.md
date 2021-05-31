@@ -16,18 +16,21 @@
 - 작업중단 GET /work-drop
   request parameter: none  
   작업 중단시 AI 판정 UI reset. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
+  ex) http://localhost:1234/work-drop
 
 - 가동 현황 update GET /cycle-info  
-  request parameter: - startTime: string   ex) 'YYYY/MM/DD hh:mm:ss'  
-                     - endTime: string     ex) 'YYYY/MM/DD hh:mm:ss'  
+  request parameter: - startTime: string   ex) '1621488609391.011'  
+                     - endTime: string     ex) '1621488619391.011'  
                      - opCode: string      ex) 'OP10-3'  
                      - count: Integer      ex) 1  
                      - cycleTime: Float    ex) 137.8   
   한 공정이 끝날 때 마다 가동 현황 update. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
+  ex) http://localhost:1234/cycle-info?startTime=1621488609391.011&endTime=1621488619391.011&opCode=OP10-3&count=1&cycleTime=131.4
 
 - 작업중단 GET /real-time-loss   
   request parameter: - loss: Float         ex) 0.0032  
   작업 중단시 AI 판정 UI reset. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다. 
+  ex) http://localhost:1234/real-time-loss?loss=0.002
 ```
 
 ## 5. socket event 명세서 - version: 1.0.0  
