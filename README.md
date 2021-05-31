@@ -13,12 +13,12 @@
 [UI source & Readme](https://github.com/yeji3999/cncPrj/tree/sprint1)
 
 ## 4. API 명세서 - version: 1.0.0  
-![api 명세서](https://user-images.githubusercontent.com/33340094/120248350-bebd2980-c2b1-11eb-8bc1-34c249a5164a.png)
+![api 명세서](https://user-images.githubusercontent.com/33340094/120248350-bebd2980-c2b1-11eb-8bc1-34c249a5164a.png){: width="80%" height="80%"}
 
 
 ## 5. socket event 명세서 - version: 1.0.0  
-![1](https://user-images.githubusercontent.com/33340094/120181693-6140c280-c248-11eb-9af2-511cb679cfb5.jpg)
-![2](https://user-images.githubusercontent.com/33340094/120181705-64d44980-c248-11eb-9bd6-6414bab0177a.jpg)
+![소켓 명세서](https://user-images.githubusercontent.com/33340094/120248994-5459b880-c2b4-11eb-9e59-3ef06a7baca6.png){: width="80%" height="80%"}
+
 
 ### *디렉토리 및 파일 구성
 
