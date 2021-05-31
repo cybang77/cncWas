@@ -10,6 +10,7 @@
 2. DEBUG=cnc-was:* npm start
 ## 3. 기동 후 UI
 ![image](https://user-images.githubusercontent.com/33340094/120166343-706b4480-c237-11eb-9c4f-a90f2482d979.png)
+[UI에 대한 정보](https://github.com/yeji3999/cncPrj/tree/sprint1).
 
 ## 4. API 명세서 - version: 1.0.0  
 ```
@@ -65,8 +66,8 @@
 ├── src<br>
 ├── views<br>
 ├── app.js<br>
-└── README.md<br>
-<br>
+└── README.md<br>  
+
 * bin: 프로그램 실행시 변수를 초기화하는 함수<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- js: timestamp를 date로 변환해주는 라이브러리 및 추후 라이브러리가 모여질 디렉토리<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- www: http 서버 선언 및 socket 통신을 위한 설정 및 통신 구현<br>
