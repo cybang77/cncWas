@@ -5,6 +5,7 @@
 * influx 5.9.0
 * socket.io 1.3.5
 * node 12.16.1
+* npm 6.14.12 
 ## 2. was 기동 방법
 1. npm install
 2. DEBUG=cnc-was:* npm start
