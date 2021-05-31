@@ -2,7 +2,6 @@
 * @influxdata/influxdb-client 1.13.0
 * express 4.16.1
 * express-history-api-fallback 2.2.1
-* influx 5.9.0
 * socket.io 1.3.5
 * node 12.16.1
 * npm 6.14.12 
@@ -37,14 +36,15 @@
 
 ## 5. socket event 명세서 - version: 1.0.0  
 ```
-- 총 제품 생산 개수 setCount   
+- 총 제품 생산량 setCount   
   return: integer   ex) 1027  
 - 가동 여부 확인 setWork  
   return: string    ex) start  
 - 평균 CT  setMeanCycleTime  
   return: float     ex) 160.7  
-- 일간 생산량 개수  setCount1Day  
+- 일간 생산량  setCount1Day  
   return: array     ex) [[‘2021-05-26’,156],[2021-05-27’,7]]  
+  (특이사항) influxdb의 쿼리 버그로 인하여 주간 생산량 또한 여기서 집계
 - 월간 생산량 setCount1Month  
   return: array     ex) [[‘2021-05-30’,163],[2021-05-31’,7]]  
 - CT 리스트 setCycleTimeList  
