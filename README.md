@@ -10,7 +10,7 @@
 2. DEBUG=cnc-was:* npm start
 ## 3. 기동 후 UI
 ![image](https://user-images.githubusercontent.com/33340094/120166343-706b4480-c237-11eb-9c4f-a90f2482d979.png)
-[UI에 대한 정보](https://github.com/yeji3999/cncPrj/tree/sprint1).
+[UI source & Readme](https://github.com/yeji3999/cncPrj/tree/sprint1)
 
 ## 4. API 명세서 - version: 1.0.0  
 ```
