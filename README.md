@@ -14,18 +14,18 @@
 ## 4. API 명세서
 * version: 1.0.0  
 ```- 작업중단 GET /work-drop ```  
-request parameter: none  
-작업 중단시 AI 판정 UI reset. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request parameter: none  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;작업 중단시 AI 판정 UI reset. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
 ```- 가동 현황 update GET /cycle-info ```  
-request parameter: - startTime: string &nbsp;&nbsp;&nbsp;&nbsp;ex) 'YYYY/MM/DD hh:mm:ss'  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request parameter: - startTime: string &nbsp;&nbsp;&nbsp;&nbsp;ex) 'YYYY/MM/DD hh:mm:ss'  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - endTime: string &nbsp;&nbsp;&nbsp;&nbsp;ex) 'YYYY/MM/DD hh:mm:ss'  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - opCode: string&nbsp;&nbsp;&nbsp;&nbsp; ex) 'OP10-3'  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - count: Integer &nbsp;&nbsp;&nbsp;&nbsp;ex) 1  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - cycleTime: Float &nbsp;&nbsp;&nbsp;&nbsp;ex) 137.8   
-한 공정이 끝날 때 마다 가동 현황 update. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;한 공정이 끝날 때 마다 가동 현황 update. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
 ```- 작업중단 GET /real-time-loss ```  
-request parameter: - loss: Float  ex) 0.0032  
-작업 중단시 AI 판정 UI reset. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;request parameter: - loss: Float  ex) 0.0032  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;작업 중단시 AI 판정 UI reset. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
 
 ## 5. socket event 명세서
 * version: 1.0.0  
