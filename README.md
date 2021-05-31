@@ -13,27 +13,8 @@
 [UI source & Readme](https://github.com/yeji3999/cncPrj/tree/sprint1)
 
 ## 4. API 명세서 - version: 1.0.0  
-```
-- 작업중단 GET /work-drop
-  request parameter: none  
-  작업 중단시 AI 판정 UI reset. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
-  ex) http://localhost:1234/work-drop
+![api 명세서](https://user-images.githubusercontent.com/33340094/120248350-bebd2980-c2b1-11eb-8bc1-34c249a5164a.png)
 
-- 가동 현황 update GET /cycle-info  
-  request parameter: - startTime: string   ex) '1621488609391.011'  
-                     - endTime: string     ex) '1621488619391.011'  
-                     - opCode: string      ex) 'OP10-3'  
-                     - count: Integer      ex) 1  
-                     - cycleTime: Float    ex) 137.8   
-  한 공정이 끝날 때 마다 가동 현황 update. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
-  ex) http://localhost:1234/cycle-info?startTime=1621488609391.011&endTime=1621488619391.011&opCode=OP10-3
-                                                                                &count=1&cycleTime=131.4
-
-- 작업중단 GET /real-time-loss   
-  request parameter: - loss: Float         ex) 0.0032  
-  작업 중단시 AI 판정 UI reset. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다. 
-  ex) http://localhost:1234/real-time-loss?loss=0.002
-```
 
 ## 5. socket event 명세서 - version: 1.0.0  
 ![1](https://user-images.githubusercontent.com/33340094/120181693-6140c280-c248-11eb-9af2-511cb679cfb5.jpg)
