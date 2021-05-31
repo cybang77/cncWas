@@ -26,7 +26,7 @@
                      - cycleTime: Float    ex) 137.8   
   한 공정이 끝날 때 마다 가동 현황 update. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
   ex) http://localhost:1234/cycle-info?startTime=1621488609391.011&endTime=1621488619391.011&opCode=OP10-3
-                                                              &count=1&cycleTime=131.4
+                                                                            &count=1&cycleTime=131.4
 
 - 작업중단 GET /real-time-loss   
   request parameter: - loss: Float         ex) 0.0032  
