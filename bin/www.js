@@ -135,6 +135,10 @@ app.io.on('connection', (socket) => {
             mon = mon.slice(i+1,mon.length)
           }
         }
+        if (mon.length > 1) {
+          mon[mon.length-2].date = app.hnlib.InfluxAggregationTimeBug(mon[mon.length-2].date)
+        }
+        console.log(mon)
         app.io.emit('monthlys', mon);
       },
     });

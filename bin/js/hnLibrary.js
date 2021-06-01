@@ -34,6 +34,9 @@ exports.InfluxAggregationTimeBug = function (date) {
   if (day == 1) {
     month = month -1;
     day = monthset[month];
+    if (month < 10) {
+      month = '0'+month;
+    }
   } else {
     day = day - 1;
   }
