@@ -6,7 +6,7 @@ var io = require('socket.io');
 var moment = require('moment');
 const { InfluxDB } = require('@influxdata/influxdb-client');
 const { time } = require('console');
-const hnlib = require('../bin/js/hnLibrary')
+app.hnlib = require('../bin/js/hnLibrary')
 const influx = new InfluxDB({
   url: "http://9.8.100.156:8086",
   token: "uOpIW55Map8EuwijejVYQkSlwtq1J_C8etbJxrRyOdl7jjS8cVRRKLnjJHmDSKs-urArRwqZYKlJqa3cxNZsNg=="
@@ -35,19 +35,7 @@ app.io.on('connection', (socket) => {
   console.log('socket connected');
 
   socket.on('setCount', () => {
-    app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start:0)|> filter(fn: (r) => r["_measurement"] == "OP10-3")
-       |> filter(fn: (r) => r["_field"] == "count") |> count(column: "_value")`, {
-      next(row, tableMeta) {
-        const o = tableMeta.toObject(row)
-        app.totalCount = o._value
-        app.io.emit('count', app.totalCount)
-      },
-      error(error) {
-        console.error(error)
-      },
-      complete() {
-      },
-    });
+    app.io.emit('count', app.totalCount)
   });
   socket.on('setWork', () => {
     let health
@@ -103,7 +91,7 @@ app.io.on('connection', (socket) => {
       },
       complete() {
         for(let i=0; i<day.length-1; i++){
-          day[i].date = hnlib.InfluxAggregationTimeBug(day[i].date);
+          day[i].date = app.hnlib.InfluxAggregationTimeBug(day[i].date);
         }
         app.io.emit('days', day) 
 
@@ -152,48 +140,47 @@ app.io.on('connection', (socket) => {
     });
   });
   socket.on('setCycleTimeList', () => {
-    let result_s = []
-    let result_e = []
-    let result_t = []
-    count1 = 0
-    count2 = 0
-    count3 = 0
-    let history = [];
-    let lineHistory = [[],[]]
-    app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: -4d) |> filter(fn: (r) => r["_measurement"] == "OP10-3") |> tail(n: 100)`, {
-      next(row, tableMeta) {
-        const o = tableMeta.toObject(row)
-        if(o._field == 'startTime') {
-          result_s[count1] = o._value;
-          count1++;
-        } 
-        if(o._field == 'endTime') {
-          result_e[count2] = o._value;
-          count2++;
-        }
-        if(o._field == 'cycleTime') {
-          result_t[count3] = o._value/1000;
-          count3++;
-        }
-      },
-      error(error) {
-        console.error(error)
-      },
-      complete() {
-        let i =0
-        for(i; i< result_s.length; i++) {
-          if (typeof(result_s[i]) != 'undefined') {
-            lineHistory[0][i] = result_e[i]
-            lineHistory[1][i] = result_t[i];
-            history[i] = {start: result_s[i], end: result_e[i], ct: hnlib.timestampTotime(result_t[i])}
-          }
-        } 
-        if (i == result_s.length){
-          app.io.emit('cycleTimeHistory', history)
-          app.io.emit('ctChart',lineHistory);
-        }
-      },
-    });
+    app.io.emit('cycleTimeHistory', app.history)
+    app.io.emit('ctChart',app.lineHistory);
+  //   let result_s = []
+  //   let result_e = []
+  //   let result_t = []
+  //   count1 = 0
+  //   count2 = 0
+  //   count3 = 0
+  //   app.history = [];
+  //   app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: -4d) |> filter(fn: (r) => r["_measurement"] == "OP10-3") |> tail(n: 100)`, {
+  //     next(row, tableMeta) {
+  //       const o = tableMeta.toObject(row)
+  //       if(o._field == 'startTime') {
+  //         result_s[count1] = o._value;
+  //         count1++;
+  //       } 
+  //       if(o._field == 'endTime') {
+  //         result_e[count2] = o._value;
+  //         count2++;
+  //       }
+  //       if(o._field == 'cycleTime') {
+  //         result_t[count3] = o._value/1000;
+  //         count3++;
+  //       }
+  //     },
+  //     error(error) {
+  //       console.error(error)
+  //     },
+  //     complete() {
+  //       let i =0
+  //       for(i; i< result_s.length; i++) {
+  //         if (typeof(result_s[i]) != 'undefined') {
+  //           app.history[i] = {start: result_s[i], end: result_e[i], ct: app.hnlib.timestampTotime(result_t[i])}
+  //         }
+  //       } 
+  //       if (i == result_s.length){
+  //         app.io.emit('cycleTimeHistory', app.history)
+  //         app.io.emit('ctChart',app.lineHistory);
+  //       }
+  //     },
+  //   });
   });
 });
 
@@ -247,3 +234,60 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start:0)|> filter(fn: (r) => r["_measurement"] == "OP10-3")
+       |> filter(fn: (r) => r["_field"] == "count") |> count(column: "_value")`, {
+  next(row, tableMeta) {
+    const o = tableMeta.toObject(row)
+    app.totalCount = o._value
+    app.io.emit('count', app.totalCount)
+  },
+  error(error) {
+    console.error(error)
+  },
+    complete() {
+  },
+});
+
+let result_s = []
+let result_e = []
+let result_t = []
+count1 = 0
+count2 = 0
+count3 = 0
+app.lineHistory = [[],[]]
+app.history = []
+app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: -4d) |> filter(fn: (r) => r["_measurement"] == "OP10-3") |> tail(n: 100)`, {
+  next(row, tableMeta) {
+    const o = tableMeta.toObject(row)
+    if(o._field == 'startTime') {
+      result_s[count1] = o._value;
+      count1++;
+    } 
+    if(o._field == 'endTime') {
+      result_e[count2] = o._value;
+      count2++;
+    }
+    if(o._field == 'cycleTime') {
+      result_t[count3] = o._value/1000;
+      count3++;
+    }
+  },
+  error(error) {
+    console.error(error)
+  },
+  complete() {
+    let i =0
+    for(i; i< result_s.length; i++) {
+      if (typeof(result_s[i]) != 'undefined') {
+        app.lineHistory[0][i] = result_e[i]
+        app.lineHistory[1][i] = result_t[i];
+        app.history[i] = {start: result_s[i], end: result_e[i], ct: app.hnlib.timestampTotime(result_t[i])}
+      }
+    } 
+    if (i == result_s.length){
+      app.io.emit('cycleTimeHistory', app.history)
+      app.io.emit('ctChart',app.lineHistory);
+    }
+  },
+});
