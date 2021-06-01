@@ -241,12 +241,14 @@ app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: -4d) |> fi
     let i =0
     for(i; i< result_s.length; i++) {
       if (typeof(result_s[i]) != 'undefined') {
-        app.lineHistory[0][i] = result_e[i]
+        app.lineHistory[0][i] = result_e[i];
         app.lineHistory[1][i] = result_t[i];
         app.history[i] = {start: result_s[i], end: result_e[i], ct: app.hnlib.timestampTotime(result_t[i])}
       }
     } 
     if (i == result_s.length){
+      app.lineHistory[0] = app.lineHistory[0].slice(-10);
+      app.lineHistory[1] = app.lineHistory[1].slice(-10);
       app.io.emit('cycleTimeHistory', app.history)
       app.io.emit('ctChart',app.lineHistory);
     }
