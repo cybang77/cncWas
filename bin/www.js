@@ -142,45 +142,6 @@ app.io.on('connection', (socket) => {
   socket.on('setCycleTimeList', () => {
     app.io.emit('cycleTimeHistory', app.history)
     app.io.emit('ctChart',app.lineHistory);
-  //   let result_s = []
-  //   let result_e = []
-  //   let result_t = []
-  //   count1 = 0
-  //   count2 = 0
-  //   count3 = 0
-  //   app.history = [];
-  //   app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: -4d) |> filter(fn: (r) => r["_measurement"] == "OP10-3") |> tail(n: 100)`, {
-  //     next(row, tableMeta) {
-  //       const o = tableMeta.toObject(row)
-  //       if(o._field == 'startTime') {
-  //         result_s[count1] = o._value;
-  //         count1++;
-  //       } 
-  //       if(o._field == 'endTime') {
-  //         result_e[count2] = o._value;
-  //         count2++;
-  //       }
-  //       if(o._field == 'cycleTime') {
-  //         result_t[count3] = o._value/1000;
-  //         count3++;
-  //       }
-  //     },
-  //     error(error) {
-  //       console.error(error)
-  //     },
-  //     complete() {
-  //       let i =0
-  //       for(i; i< result_s.length; i++) {
-  //         if (typeof(result_s[i]) != 'undefined') {
-  //           app.history[i] = {start: result_s[i], end: result_e[i], ct: app.hnlib.timestampTotime(result_t[i])}
-  //         }
-  //       } 
-  //       if (i == result_s.length){
-  //         app.io.emit('cycleTimeHistory', app.history)
-  //         app.io.emit('ctChart',app.lineHistory);
-  //       }
-  //     },
-  //   });
   });
 });
 

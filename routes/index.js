@@ -14,7 +14,6 @@ router.get('/alert', (req, res, next) => {
 });
 router.get('/work-drop', (req, res, next) => {
   res.status(200).send("OK") // 200 code send 
-  // req.app.io.emit('isWork', 'stop');
   req.app.io.emit('loss', 'null');
   req.app.io.emit('anomalyDetection', '-');
   console.log('check')
@@ -48,8 +47,6 @@ router.get('/cycle-info', (req, res, next) => {
 
 router.get('/work-info', (req, res, next) => {
   res.status(200).send("OK");
-  // req.app.work = req.query.work;
-  // req.app.io.emit('isWork', req.query.work);
 });
 
 router.get('/real-time-loss', (req, res, next) => {
