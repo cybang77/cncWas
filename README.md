@@ -74,8 +74,9 @@ OK
 |     setCount1Day        |     하루 생산한 제품 생산량     *특) influx 버그로 인하여     주간 생산량 또한 여기서 체크*    |
 |     setCount1Month      |     한달 생산량                                                                              |
 |     setCycleTimeList    |     최근 100개 CT 리스트                                                                     |
-***
+
 ### 총 생산량 setCount  
+***
 ***Request Parameters***  
 None  
 ***Response***  
