@@ -13,7 +13,6 @@
 [UI source & Readme](https://github.com/yeji3999/cncPrj/tree/sprint1)
 
 ## 4. API 명세서 - version: 1.0.0  
-<br>
 <h3>4-1. REST API Summary  </h3>
 <table>
     <tr>
@@ -33,7 +32,6 @@
         <td>실시간 loss율</td>
     </tr>
 </table>
-<br/>
 
 * ### 작업 중단 GET /work-drop
     ---
@@ -112,7 +110,6 @@
         <td>최근 100개 CT 리스트</td>
     </tr>
 </table>
-<br/>
 
 * ### 총 생산량 setCount
      ---
