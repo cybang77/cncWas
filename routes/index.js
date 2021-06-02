@@ -34,7 +34,7 @@ router.get('/cycle-info', (req, res, next) => {
   req.app.lineHistory[0].shift()
   req.app.lineHistory[1].shift()
   req.app.lineHistory[0][req.app.lineHistory.length+1] = end
-  req.app.lineHistory[1][req.app.lineHistory.length+1] = req.query.cycleTime/1000
+  req.app.lineHistory[1][req.app.lineHistory.length+1] = parseFloat(req.query.cycleTime/1000).toFixed(3)
   req.app.io.emit('cycleTimeHistory', req.app.history)
   req.app.io.emit('ctChart',req.app.lineHistory);
   req.app.io.emit('days', req.app.todayCount);
