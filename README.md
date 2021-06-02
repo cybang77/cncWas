@@ -120,7 +120,8 @@ OK
 </table>
 </div>
 <br>
-<li ><ul><li><h3>총 생산량 setCount</h3></li></ul></li>
+<ul style="list-style:none;">
+<li style="list-style:none;"><ul><li><h3>총 생산량 setCount</h3></li></ul></li>
 <li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
 <ul><li style="list-style:none;">
 
@@ -133,6 +134,7 @@ return 1027
 </li></ul>
 <li ><ul><li><h3>가동 현황 setWork</h3></li></ul></li>
 <li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
+<ul><li style="list-style:none;">
 
 ***Request Parameters***  
 None  
@@ -143,6 +145,7 @@ return 'start'
 </li></ul>
 <li ><ul><li><h3>최근 5개 CT 평균 setMeanCycleTime</h3></li></ul></li>
 <li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
+<ul><li style="list-style:none;">
 
 ***Request Parameters***  
 None  
@@ -153,6 +156,7 @@ return 160.7
 </li></ul>
 <li ><ul><li><h3>하루 생산량 setCount1Day</h3></li></ul></li>
 <li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
+<ul><li style="list-style:none;">
 
 ***Request Parameters***  
 None  
@@ -166,6 +170,7 @@ return [[‘2021-05-26’, 156],[2021-05-27’, 7]]
 </li></ul>
 <li ><ul><li><h3>한달 생산량 setCount1Month</h3></li></ul></li>
 <li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
+<ul><li style="list-style:none;">
 
 ***Request Parameters***  
 None  
@@ -176,6 +181,7 @@ return [[‘2021-05-26’, 156],[2021-05-27’, 7]]
 </li></ul>
 <li ><ul><li><h3>최근 100개 CT 리스트 setCycleTimeList</h3></li></ul></li>
 <li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
+<ul><li style="list-style:none;">
 
 ***Request Parameters***  
 None  
