@@ -249,6 +249,7 @@ app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: -4d) |> fi
       }
     } 
     if (i == result_s.length){
+      console.log(app.lineHistory[0].length)
       app.lineHistory[0] = app.lineHistory[0].slice(-10);
       app.lineHistory[1] = app.lineHistory[1].slice(-10);
       app.io.emit('cycleTimeHistory', app.history)
