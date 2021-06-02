@@ -14,9 +14,7 @@
 
 ## 4. API 명세서 - version: 1.0.0  
 <br>
-<html>
-<h3 style="text-indent: 2em; background-color: #D3D3D3; color: black">4-1. REST API Summary  </h3>
-<div style="margin-left: 50px">
+<h3>4-1. REST API Summary  </h3>
 <table>
     <tr>
         <th>Method and URI</th>
@@ -35,23 +33,21 @@
         <td>실시간 loss율</td>
     </tr>
 </table>
-</div>
 <br/>
-<ul style="list-style:none;">
-<li style="list-style:none;"><ul><li><h3>작업 중단 GET /work-drop</h3></li></ul></li>
-<li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
-<ul><li style="list-style:none;"></html>
 
-***Request Parameters***  
-None  
-***Response***  
-작업 중단시 AI 판정 UI reset. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
-***Success Example:***  
-{  
-OK  
-}  
-</li></ul>
-<li ><ul><li><h3>가동 현황 GET /cycle-info</h3></li></ul></li>
+* ### 작업 중단 GET /work-drop
+    ---
+
+    ***Request Parameters***  
+    None  
+    ***Response***  
+    작업 중단시 AI 판정 UI reset. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
+    ***Success Example:***  
+    {  
+    OK  
+    }  
+
+<h3>가동 현황 GET /cycle-info</h3></li></ul></li>
 <li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
 <ul><li style="list-style:none;">
 
