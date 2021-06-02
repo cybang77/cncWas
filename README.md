@@ -46,46 +46,43 @@
     {  
     OK  
     }  
+* ### 가동 현황 GET /cycle-info</h3>
+    ---
 
-<h3>가동 현황 GET /cycle-info</h3></li></ul></li>
-<li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
-<ul><li style="list-style:none;">
+    ***Request Parameters***  
 
-***Request Parameters***  
-|     Parameter    |     Type       |     Desctiption                       |
-|:------------------|:----------------|:---------------------------------------|
-|     opCode       |     string     |     가공 코드                         |
-|     startTime    |     string     |     timstamp형식으로 ns까지   표기    |
-|     endTime      |     string     |     timstamp형식으로 ns까지 표기      |
-|     count        |     integer    |     오직 1만 가능                     |
-|     cycleTime    |     float      |     가공 시간                         |  
+    |     Parameter    |     Type       |     Desctiption                       |
+    |:------------------|:----------------|:---------------------------------------|
+    |     opCode       |     string     |     가공 코드                         |
+    |     startTime    |     string     |     timstamp형식으로 ns까지   표기    |
+    |     endTime      |     string     |     timstamp형식으로 ns까지 표기      |
+    |     count        |     integer    |     오직 1만 가능                     |
+    |     cycleTime    |     float      |     가공 시간                         |  
 
-***Response***  
-한 공정이 끝날 때 마다 가동 현황 update. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
-***Success Example:***  
-{  
-OK  
-}  
-</li></ul>
-<li ><ul><li><h3>실시간 loss율 GET /real-time-loss</h3></li></ul></li>
-<li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
-<ul><li style="list-style:none;">
+    ***Response***  
+    한 공정이 끝날 때 마다 가동 현황 update. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
+    ***Success Example:***  
+    {  
+    OK  
+    }  
+* ### 실시간 loss율 GET /real-time-loss
+    ---
 
-***Request Parameters***  
-|     Parameter    |     Type     |     Desctiption       |
-|:------------------|:--------------|:-----------------------|
-|     loss         |     float    |      실시간 loss율    |  
+    ***Request Parameters***  
+    |     Parameter    |     Type     |     Desctiption       |
+    |:------------------|:--------------|:-----------------------|
+    |     loss         |     float    |      실시간 loss율    |  
 
-***Response***  
-실시간으로 loss관련 UI에 반영. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
-***Success Example:***  
-{  
-OK  
-}  
-</li></ul></ul>
+    ***Response***  
+    실시간으로 loss관련 UI에 반영. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
+    ***Success Example:***  
+    {  
+    OK  
+    }  
+<br/>
 
-<h3 style="text-indent: 2em; background-color: #D3D3D3; color: black">4-2. Socket IO Summary</h3>
-<div style="margin-left: 50px">
+### 4-2. Socket IO Summary
+
 <table>
     <tr>
         <th>Socket Event</th><th>Description</th>
@@ -115,78 +112,68 @@ OK
         <td>최근 100개 CT 리스트</td>
     </tr>
 </table>
-</div>
-<br>
-<ul style="list-style:none;">
-<li style="list-style:none;"><ul><li><h3>총 생산량 setCount</h3></li></ul></li>
-<li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
-<ul><li style="list-style:none;">
+<br/>
 
-***Request Parameters***  
-None  
-***Response***  
-총생산량을 집계합니다. 요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.   
-***Success Example:***  
-return 1027 
-</li></ul>
-<li ><ul><li><h3>가동 현황 setWork</h3></li></ul></li>
-<li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
-<ul><li style="list-style:none;">
+* ### 총 생산량 setCount
+     ---
 
-***Request Parameters***  
-None  
-***Response***  
-현재 가동 여부를 전송합니다. 요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.   
-***Success Example:***  
-return 'start' 
-</li></ul>
-<li ><ul><li><h3>최근 5개 CT 평균 setMeanCycleTime</h3></li></ul></li>
-<li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
-<ul><li style="list-style:none;">
+    ***Request Parameters***  
+    None  
+    ***Response***  
+    총생산량을 집계합니다. 요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.   
+    ***Success Example:***  
+    return 1027 
+* ### 가동 현황 setWork
+    ---
 
-***Request Parameters***  
-None  
-***Response***  
-최근 5개 평균 cycle time을 집계합니다. 요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.   
-***Success Example:***  
-return 160.7 
-</li></ul>
-<li ><ul><li><h3>하루 생산량 setCount1Day</h3></li></ul></li>
-<li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
-<ul><li style="list-style:none;">
+    ***Request Parameters***  
+    None  
+    ***Response***  
+    현재 가동 여부를 전송합니다. 요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.   
+    ***Success Example:***  
+    return 'start' 
+* ### 최근 5개 CT 평균 setMeanCycleTime
+    ---
 
-***Request Parameters***  
-None  
-***Response***  
-하루 생산량을 집계합니다.  
-*특이사항)* influx2.0 버그로 인하여 주간 생산량 또한 여기서 집계
-요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.
+    ***Request Parameters***  
+    None  
+    ***Response***  
+    최근 5개 평균 cycle time을 집계합니다. 요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.   
+    ***Success Example:***  
+    return 160.7 
 
-***Success Example:***  
-return [[‘2021-05-26’, 156],[2021-05-27’, 7]] 
-</li></ul>
-<li ><ul><li><h3>한달 생산량 setCount1Month</h3></li></ul></li>
-<li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
-<ul><li style="list-style:none;">
+* ### 하루 생산량 setCount1Day
+    ---
 
-***Request Parameters***  
-None  
-***Response***  
-한달 생산량을 집계합니다. 요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.   
-***Success Example:***  
-return [[‘2021-05-26’, 156],[2021-05-27’, 7]]
-</li></ul>
-<li ><ul><li><h3>최근 100개 CT 리스트 setCycleTimeList</h3></li></ul></li>
-<li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
-<ul><li style="list-style:none;">
+    ***Request Parameters***  
+    None  
+    ***Response***  
+    하루 생산량을 집계합니다.  
+    *특이사항)* influx2.0 버그로 인하여 주간 생산량 또한 여기서 집계
+    요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.
 
-***Request Parameters***  
-None  
-***Response***  
-한달 생산량을 집계합니다. 요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.  
-***Success Example:***  
-return [[‘2021/5/31 16:38:40’, ‘2021/5/31 16:40:52’,131.5], [‘2021/5/31 16:42:40’, ‘2021/5/31 16:42:52’,131.5] … , [‘2021/5/31 17:21:40’, ‘2021/5/31 16:23:52’,131.5]] 
-</li></ul></ul>
+    ***Success Example:***  
+    return [[‘2021-05-26’, 156],[2021-05-27’, 7]] 
+* ### 한달 생산량 setCount1Month
+    ---
+
+    ***Request Parameters***  
+    None  
+    ***Response***  
+    한달 생산량을 집계합니다. 요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.   
+    ***Success Example:***  
+    return [[‘2021-05-26’, 156],[2021-05-27’, 7]]
+* ### 최근 100개 CT 리스트 setCycleTimeList
+    ---
+
+    ***Request Parameters***  
+    None  
+    ***Response***  
+    한달 생산량을 집계합니다. 요청이 성공적으로 서버에 전달되면 아래의 내용을 return 합니다.  
+    ***Success Example:***  
+    return [[‘2021/5/31 16:38:40’, ‘2021/5/31 16:40:52’,131.5], [‘2021/5/31 16:42:40’, ‘2021/5/31 16:42:52’,131.5] … , [‘2021/5/31 17:21:40’, ‘2021/5/31 16:23:52’,131.5]] 
+<br/><br/>
+
 ### *디렉토리 및 파일 구성
 
 ```bash
