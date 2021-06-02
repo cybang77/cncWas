@@ -14,6 +14,7 @@
 
 ## 4. API 명세서 - version: 1.0.0  
 <br>
+<html>
 <h3 style="text-indent: 2em; background-color: #D3D3D3; color: black">4-1. REST API Summary  </h3>
 <div style="margin-left: 50px">
 <table>
@@ -39,7 +40,7 @@
 <ul style="list-style:none;">
 <li style="list-style:none;"><ul><li><h3>작업 중단 GET /work-drop</h3></li></ul></li>
 <li style="list-style:none; margin-left: 18px;"><hr style="text-indent: 2em;"></li>
-<ul><li style="list-style:none;">
+<ul><li style="list-style:none;"></html>
 
 ***Request Parameters***  
 None  
