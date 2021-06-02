@@ -56,7 +56,6 @@ app.io.on('connection', (socket) => {
   });
   });
   socket.on('setMeanCycleTime', () => {
-    console.log('!!!!')
     app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: 0) |> filter(fn: (r) => r["_measurement"] == "OP10-3")
             |> filter(fn: (r) => r["_field"] == "cycleTime")   |> movingAverage(n: 5) |> last()`, {
       next(row, tableMeta) {
@@ -138,7 +137,6 @@ app.io.on('connection', (socket) => {
         if (mon.length > 1) {
           mon[mon.length-2].date = app.hnlib.InfluxAggregationTimeBug(mon[mon.length-2].date)
         }
-        console.log(mon)
         app.io.emit('monthlys', mon);
       },
     });
@@ -246,7 +244,7 @@ app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: -4d) |> fi
     for(i; i< result_s.length; i++) {
       if (typeof(result_s[i]) != 'undefined') {
         app.lineHistory[0][i] = result_e[i];
-        app.lineHistory[1][i] = result_t[i];
+        app.lineHistory[1][i] = parseFloat(result_t[i]).toFixed(3)
         app.history[i] = {start: result_s[i], end: result_e[i], ct: app.hnlib.timestampTotime(result_t[i])}
       }
     } 
