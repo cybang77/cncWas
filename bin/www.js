@@ -11,7 +11,6 @@ const influx = new InfluxDB({
   url: "http://9.8.100.156:8086",
   token: "uOpIW55Map8EuwijejVYQkSlwtq1J_C8etbJxrRyOdl7jjS8cVRRKLnjJHmDSKs-urArRwqZYKlJqa3cxNZsNg=="
 })
-
 app.lossSum = 0;
 app.lossCount = 1;
 app.lossCollection = [];
