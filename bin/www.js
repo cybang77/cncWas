@@ -196,7 +196,7 @@ app.io.on('connection', (socket) => {
     });
   });
 });
-
+// test
 setInterval(() => {
   let health
   app.influxQuery.queryRows(`from(bucket: "cnc") |> range(start: -10s, stop: now()) |> filter(fn: (r) => r["_measurement"] == "OP10-3")`, {
