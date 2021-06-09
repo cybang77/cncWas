@@ -8,15 +8,12 @@ const hnlib = require('../bin/js/hnLibrary');
 router.get('/', (req, res) => {
   res.render('index.html');
 });
-router.get('/alert', (req, res, next) => {
-  res.status(200).send() // 200 code send 
-  req.app.io.emit('alert');
-});
+
 router.get('/work-drop', (req, res, next) => {
   res.status(200).send() // 200 code send 
   // req.app.io.emit('isWork', 'stop');
   req.app.io.emit('loss', 'null');
-  req.app.io.emit('AD', '-');
+  req.app.io.emit('anomalyDetection', '-');
   console.log('check')
 });
 
@@ -33,17 +30,11 @@ router.get('/cycle-info', (req, res, next) => {
   req.app.io.emit('days', req.app.todayCount);
   req.app.io.emit('count', req.app.totalCount);
   setTimeout(() => {
-    req.app.io.emit('AD', '-');
+    req.app.io.emit('anomalyDetection', '-');
     req.app.lossSum = 0;
     req.app.lossCount = 1;
     req.app.lossCollection = [];
   }, 3000)
-});
-
-router.get('/work-info', (req, res, next) => {
-  res.status(200).send();
-  // req.app.work = req.query.work;
-  // req.app.io.emit('isWork', req.query.work);
 });
 
 router.get('/real-time-loss', (req, res, next) => {
@@ -52,7 +43,7 @@ router.get('/real-time-loss', (req, res, next) => {
   req.query.loss = parseFloat(req.query.loss);
 
   if (req.app.lossCount == 1) {
-    req.app.io.emit('AD', '판정중');
+    req.app.io.emit('anomalyDetection', '판정중');
   }
   if (req.app.lossCount < 50) {
     req.app.lossSum += req.query.loss;
@@ -60,10 +51,10 @@ router.get('/real-time-loss', (req, res, next) => {
     req.app.lossCollection.push(req.query.loss);
   } else {
     if (req.app.lossSum/req.app.lossCount > 0.05) {
-      req.app.io.emit('AD', '비정상');
+      req.app.io.emit('anomalyDetection', '비정상');
       req.app.io.emit('alert');
     } else {
-      req.app.io.emit('AD', '정상');
+      req.app.io.emit('anomalyDetection', '정상');
     }
     req.app.lossCount--;
     req.app.lossSum -= req.app.lossCollection[0];

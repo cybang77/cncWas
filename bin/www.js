@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 var app = require('../app');
+var kafka = require('kafka-node');
 var debug = require('debug')('cnc-was:server');
 var http = require('http');
 var io = require('socket.io');
@@ -11,6 +12,7 @@ const influx = new InfluxDB({
   url: "http://9.8.100.156:8086",
   token: "uOpIW55Map8EuwijejVYQkSlwtq1J_C8etbJxrRyOdl7jjS8cVRRKLnjJHmDSKs-urArRwqZYKlJqa3cxNZsNg=="
 })
+var consumer = new kafka.ConsumerGroup({ kafkaHost: '9.8.100.152:9092', autoCommit: true, fromOffset: 'latest', outOfRangeOffset: 'earliest', groupId: 'cncWas' }, 'cnc_test');
 
 app.lossSum = 0;
 app.lossCount = 1;
@@ -196,26 +198,11 @@ app.io.on('connection', (socket) => {
     });
   });
 });
-// test
-setInterval(() => {
-  let health
-  app.influxQuery.queryRows(`from(bucket: "cnc") |> range(start: -10s, stop: now()) |> filter(fn: (r) => r["_measurement"] == "OP10-3")`, {
-    next(row, tableMeta) {
-      health = tableMeta.toObject(row)
-    },
-    error(error) {
-      console.error(error)
-    },
-    complete() {
-      if(typeof(health) == 'undefined') {
-        app.io.emit('isWork', 'stop');
-      } else {
-       app.io.emit('isWork', 'start');
-      }
-    },
-  });
-}, 3000);
 
+// consuming 하면서 가동중인지 확인. 안보내면, ui에서 3초후 비가동으로 바꿈
+consumer.on('message', function (message) {
+  app.io.emit('isWork');
+});
 server.listen(1234);
 server.on('error', onError);
 server.on('listening', onListening);
