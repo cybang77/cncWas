@@ -223,7 +223,7 @@ app.io.on('connection', (socket) => {
     http.get(option, function(res) {
       res.on("data", function(chunk) {
         chunk = chunk.toString('utf8');
-        if (!chunk == ""){
+        if (chunk.length > 10){
           chunk = JSON.parse(chunk);
           // chunk[0].name = chunk[0].name.split('_')[1]
           app.io.emit('nowModelInfo', {model: chunk[0].name, processCnt: chunk.length});
@@ -233,13 +233,12 @@ app.io.on('connection', (socket) => {
         }
       });
     }).on('error', function(e) {
+      app.io.emit('nowModelInfo', {model: '', processCnt: 0});
       console.log("Got error: " + e.message);
     });
   });
 
-  socket.on('changeModel', (data) => {
-    let model = data.model.split('_')[1]
-
+  socket.on('modelStop', (model) => {
     let option = optionClone(options)
     // option.path = option.path + model
     option.path = option.path + 'stop'
@@ -251,28 +250,33 @@ app.io.on('connection', (socket) => {
           chunk = JSON.parse(chunk);
           console.log('stop status ', res.statusCode, ' stop body ', chunk)
           if (chunk.State == 'Prediction Stop') {
-            let op = optionClone(options)
-            op.path = op.path + model +'/'+ data.processCnt
-            console.log('start option path: ', op.path)
-            http.get(op, function(res) {
-              if (res.statusCode == 200) {
-                res.on("data", function(chunk) {
-                  chunk = chunk.toString('utf8');
-                  chunk = JSON.parse(chunk);
-                  console.log('start status ', res.statusCode, ' start body ', chunk)
-                  if (chunk.State == 'Prediction Start') {
-                    app.io.emit('modelChangeRes', {state: 'Model Changed'});
-                    console.log("예지")
-                  } else {
-                    app.io.emit('modelChangRes', {state: 'Engine Start Fail'});
-                  }
-                });
-              }
-            }).on('error', function(e) {
-              console.log("Got error: " + e.message);
-            });
+            app.io.emit('modelChangRes', {state: 'Engine Stop Sucess'});
           } else {
             app.io.emit('modelChangRes', {state: 'Engine Stop Fail'});
+          }
+        });
+      }
+    }).on('error', function(e) {
+      console.log("Got error: " + e.message);
+    });
+  });
+
+  socket.on('modelStart', (model) => {
+    let option = optionClone(options)
+    // option.path = option.path + model
+    model = model.split('_')[1]
+    option.path = option.path + model
+    console.log(option.path,"  sss")
+    http.get(option, function(res) {
+      if (res.statusCode == 200) {
+        res.on("data", function(chunk) {
+          chunk = chunk.toString('utf8');
+          chunk = JSON.parse(chunk);
+          console.log('start status ', res.statusCode, ' start body ', chunk)
+          if (chunk.State == 'Prediction Stop') {
+            app.io.emit('modelChangRes', {state: 'Engine Start Sucess'});
+          } else {
+            app.io.emit('modelChangRes', {state: 'Engine Start Fail'});
           }
         });
       }
