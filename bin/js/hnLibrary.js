@@ -40,7 +40,11 @@ exports.InfluxAggregationTimeBug = function (date) {
   } else {
     day = day - 1;
     if (day < 10) {
+<<<<<<< HEAD
       day = '0'+day;
+=======
+      day = '0' + day;
+>>>>>>> sprint2
     }
   }
   date = year + '-' + month + '-' + day;
