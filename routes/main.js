@@ -31,11 +31,14 @@ router.get('/cycle-info', (req, res, next) => {
       let start = hnlib.timestampTodate(req.query.startTime)
       let end = hnlib.timestampTodate(req.query.endTime)
       influxWriteApi = req.app.influxdb.getWriteApi('HN', 'cycle_info', 'ns')
-      point = new Point(req.query.opCode).stringField('startTime', start).stringField('endTime', end).intField('count', req.query.count).intField('cycleTime', req.query.cycleTime)
+      let SN = '103'+String(parseInt(req.query.startTime))+String(parseInt(req.query.cycleTime))
+      point = new Point(req.query.opCode).stringField('startTime', start).stringField('endTime', end).intField('count', req.query.count).intField('cycleTime', req.query.cycleTime).stringField('S/N', SN)
+      console.log(SN)
       influxWriteApi.writePoint(point);
       influxWriteApi.close();
       req.app.totalCount += 1;
       req.app.todayCount += 1;
+      req.app.io.emit('productSerialNum', SN)
       req.app.io.emit('days', req.app.todayCount);
       req.app.io.emit('count', req.app.totalCount);
 
