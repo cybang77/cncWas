@@ -347,6 +347,10 @@ function optionClone(obj) {
 // scichart socket connection 
 // get Kafka Data
 
+/*
+  kafkajs 컨슈머를 통한 preprocess와 predict(load, loss)결과를 수신하여 버퍼에 적재하고 ws를 통해 클라이언트에 전송
+*/
+
 const { Kafka } = require('kafkajs')
  
 const kafkajs = new Kafka({
