@@ -33,8 +33,8 @@ router.post('/end',(req, res, next) => {
     fstream = fs.createWriteStream(__public + filename);
     fs.writeFile(__public + 'predictInfo.txt', JSON.stringify(opData), function(err)  {
       if (err === null) { 
-        console.log('success'); 
-      } else { console.log('fail'); }
+        console.log('predictInfo txt save success'); 
+      } else { console.log('predictInfo txt save fail'); }
     })
     
     file.pipe(fstream);

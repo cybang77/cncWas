@@ -101,12 +101,12 @@ app.io.on('connection', (socket) => {
               if (i == 0) {
                 startweek = weeknumber;
                 for (let j = 0; j < lastweek - startweek + 1; j++) {
-                  week[j] = { date: '', count: 0 };
+                  week[j] = { date: moment('2021'+(startweek+j), 'YYYYWW').format('YYYY-MM-DD'), count: 0 };
+                  // console.log(day[i].date)
                 }
               }
-              week[weeknumber - startweek].date = day[i].date
+              // week[weeknumber - startweek].date = day[i].date
               week[weeknumber - startweek].count = day[i].count + week[weeknumber - startweek].count;
-              console.log(day)
             }
           }
         }
@@ -132,9 +132,10 @@ app.io.on('connection', (socket) => {
             mon = mon.slice(i + 1, mon.length)
           }
         }
-        if (mon.length > 1) {
-          mon[mon.length-2].date = app.hnlib.InfluxAggregationTimeBug(mon[mon.length-2].date)
-        }
+        // if (mon.length > 1) {
+        //   console.log('monthly ===> ', mon.length, mon[mon.length-2].date)
+        //   mon[mon.length-2].date = app.hnlib.InfluxAggregationTimeBug(mon[mon.length-2].date)
+        // }
         app.io.emit('monthlys', mon);
       },
     });
@@ -195,7 +196,7 @@ app.io.on('connection', (socket) => {
           chunk = JSON.parse(chunk);
           // chunk[0].name = chunk[0].name.split('_')[1]
           app.io.emit('nowModelInfo', { model: chunk[0].name, processCnt: chunk.length });
-          console.log('nowModelInfo', { model: chunk[0].name, processCnt: chunk.length })
+          // console.log('nowModelInfo', { model: chunk[0].name, processCnt: chunk.length })
         } else {
           console.log("stop 상태")
         }
@@ -258,7 +259,7 @@ app.io.on('connection', (socket) => {
       fs.readFile('/home/rnd03/workspace/source/WAS/sprint1/public/predictImg/predictInfo.txt', 'utf-8', (err, data) => {
         if(err) {
           if (err.errno != -21) 
-            console.log(err)
+            console.log('wwww 261', err)
         } else {
           app.predicInfo = JSON.parse(data)
           app.io.emit('qualityPredictEnd', app.predicInfo)
