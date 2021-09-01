@@ -25,17 +25,20 @@ router.get('/cycle-info', (req, res, next) => {
   }
   else {
     const valiedToken = hnAuth.TokenCheck(req.headers.token);
-    console.log("wwww 27 ", valiedToken)
+    // console.log("wwww 27 ", valiedToken)
     if (valiedToken.res) {
       res.status(valiedToken.code).send(valiedToken.message);
       let start = hnlib.timestampTodate(req.query.startTime)
       let end = hnlib.timestampTodate(req.query.endTime)
       influxWriteApi = req.app.influxdb.getWriteApi('HN', 'cycle_info', 'ns')
-      point = new Point(req.query.opCode).stringField('startTime', start).stringField('endTime', end).intField('count', req.query.count).intField('cycleTime', req.query.cycleTime)
+      // let SN = '103'+String(parseInt(req.query.startTime))+String(parseInt(req.query.cycleTime))
+      point = new Point(req.query.opCode).stringField('startTime', start).stringField('endTime', end).intField('count', req.query.count).intField('cycleTime', req.query.cycleTime)//.stringField('S/N', SN)
+      // console.log(SN)
       influxWriteApi.writePoint(point);
       influxWriteApi.close();
       req.app.totalCount += 1;
       req.app.todayCount += 1;
+      // req.app.io.emit('productSerialNum', SN)
       req.app.io.emit('days', req.app.todayCount);
       req.app.io.emit('count', req.app.totalCount);
 
@@ -57,8 +60,7 @@ router.get('/real-time-loss', (req, res, next) => {
     res.status(401).send({"result":"Invalid access token","errormessage":"oauth.v2.TokenNotFound"})
   } else {
     const valiedToken = hnAuth.TokenCheck(req.headers.token);
-    // console.log("wwww 27 ", valiedToken)
-    // console.log("wwww 59 ", valiedToken)
+    // console.log("wwww 63 ", valiedToken)
     if (valiedToken.res) {
       res.status(valiedToken.code).send(valiedToken.message);
       // console.log(req.query.loss)
@@ -87,27 +89,6 @@ router.get('/real-time-loss', (req, res, next) => {
       res.status(valiedToken.code).send(valiedToken.message);
     }
   }
-});
-
-router.get('/test', (req, res) => {
-  // console.log(req.app.keycloak)
-  if (req.headers.token == null) {
-    res.status(401).send({"result":"Invalid access token","errormessage":"oauth.v2.TokenNotFound"})
-  }
-  else {
-    const valiedToken = hnAuth.TokenCheck(req.headers.token);
-
-    if (valiedToken.res) {
-      res.status(valiedToken.code).send(valiedToken.message);
-  } else {
-      res.status(valiedToken.code).send(valiedToken.message);
-    }
-  }
-});
-
-router.get('/detection', (req, res) => {
-  console.log(req.query.info);
-  // app.io.emit('lossData10Mean', message.value.split(',')[5]);
 });
 
 module.exports = router;
