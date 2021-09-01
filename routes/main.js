@@ -91,29 +91,4 @@ router.get('/real-time-loss', (req, res, next) => {
   }
 });
 
-router.get('/test', (req, res) => {
-  // console.log(req.app.keycloak)
-  if (req.headers.token == null) {
-    res.status(401).send({"result":"Invalid access token","errormessage":"oauth.v2.TokenNotFound"})
-  }
-  else {
-    const valiedToken = hnAuth.TokenCheck(req.headers.token);
-
-    if (valiedToken.res) {
-      res.status(valiedToken.code).send(valiedToken.message);
-  } else {
-      res.status(valiedToken.code).send(valiedToken.message);
-    }
-  }
-});
-
-router.get('/detection', (req, res) => {
-  console.log(req.query.info);
-  // app.io.emit('lossData10Mean', message.value.split(',')[5]);
-});
-
-router.post('/img', (req, res, next) => {
-  res.send("OK");
-});
-
 module.exports = router;

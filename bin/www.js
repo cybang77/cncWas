@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 var app = require('../app');
-// var kafka = require('kafka-node');
 var debug = require('debug')('cnc-was:server');
 var http = require('http');
-// var https = require('https')
 var fs = require('fs')
 var privateKey = fs.readFileSync('/home/rnd03/ssl/server.key', 'utf8');
 var certificate = fs.readFileSync('/home/rnd03/ssl/server.crt', 'utf8');
@@ -23,9 +21,6 @@ const options = {
   path: '/process/prediction/',
   method: 'GET'
 }
-// var consumer = new kafka.ConsumerGroup({ kafkaHost: '9.8.100.152:9092', autoCommit: true, fromOffset: 'latest', outOfRangeOffset: 'earliest', groupId: 'cncWas' }, 'MH001001001-CNC001');
-// var consumerPredict = new kafka.ConsumerGroup({ kafkaHost: '9.8.100.152:9092', autoCommit: true, fromOffset: 'latest', outOfRangeOffset: 'earliest' }, 'MH001001001-CNC001-detection');
-// var consumer2 = new kafka.ConsumerGroup({ kafkaHost: '9.8.100.152:9092', autoCommit: true, fromOffset: 'latest', outOfRangeOffset: 'earliest', groupId: 'cncWas' }, 'MH001001001-CNC001-detection');
 const hnAuth = require("./js/hnAuth");
 app.lossSum = 0;
 app.lossCount = 1;
@@ -50,8 +45,6 @@ app.io.sockets.setMaxListeners(0);
 
 // connection시 인증 params
 app.io.on('connection', (socket) => {
-  // console.log(socket)
-  // console.log('socket connected');
   socket.on('setCount', () => {
     app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start:0)|> filter(fn: (r) => r["_measurement"] == "OP10-3")|> filter(fn: (r) => r["_field"] == "count") |> count(column: "_value")`, {
       next(row, tableMeta) {
@@ -64,22 +57,6 @@ app.io.on('connection', (socket) => {
       },
     })
   });
-  // app.io.on('setWork', () => {
-  //   let health
-  //   app.influxQuery.queryRows(`from(bucket: "cnc") |> range(start: -3s) |> filter(fn: (r) => r["_measurement"] == "OP10-3")`, {
-  //     next(row, tableMeta) {
-  //       health = tableMeta.toObject(row)
-  //     }, error(error) {
-  //       console.error(error)
-  //     }, complete() {
-  //       if (typeof (health) == 'undefined') {
-  //         app.io.emit('isWork', 'stop');
-  //       } else {
-  //         app.io.emit('isWork', 'start');
-  //       }
-  //     },
-  //   });
-  // });
   socket.on('setMeanCycleTime', () => {
     app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: 0) |> filter(fn: (r) => r["_measurement"] == "OP10-3")
         |> filter(fn: (r) => r["_field"] == "cycleTime")   |> movingAverage(n: 5) |> last()`, {
@@ -292,16 +269,6 @@ app.io.on('connection', (socket) => {
     }
   });
 });
-var cnt = 10;
-var consumerPredict;
-var stt = ""
-var fs = require('fs');
-// consuming 하면서 가동중인지 확인. 안보내면, ui에서 3초후 비가동으로 바꿈
-// consumer.on('message', function (message) {
-//   console.log('kafka alive')
-//   app.io.emit('isWork');
-// });
-
 
 server.listen(8082);
 server.on('error', onError);
@@ -343,6 +310,35 @@ function optionClone(obj) {
   return output;
 }
 
+// sprint3 isWork socket 통신을 위한 라이브러리
+const { Kafka } = require('kafkajs')
+ 
+const kafkajs = new Kafka({
+  clientId: 'forScichart',
+  brokers: ['9.8.100.152:9092']
+})
+
+const consumerjs = kafkajs.consumer({ groupId: 'forScichart' })
+
+const run = async () => {
+  // Consuming
+  await consumerjs.connect()
+  await consumerjs.subscribe({ topic: 'MH001001001-CNC001', fromBeginning: false }) // (전처리데이터) 실제 데이터
+
+  await consumerjs.run({
+    eachMessage: async ({ topic, partition, message }) => {
+      // console.log('kafka alive')
+      // console.log(topic, " ", message.value.toString())
+      switch(topic) {
+        case 'MH001001001-CNC001':
+          app.io.emit('isWork');
+          break;
+      }
+    },
+  })
+} 
+run().catch(console.error)
+///////////////////// sprint3이후 아래 기능에 추가되어 지워질 부분 
 
 // scichart socket connection 
 // get Kafka Data
@@ -350,7 +346,7 @@ function optionClone(obj) {
 /*
   kafkajs 컨슈머를 통한 preprocess와 predict(load, loss)결과를 수신하여 버퍼에 적재하고 ws를 통해 클라이언트에 전송
 */
-
+/* 
 const { Kafka } = require('kafkajs')
  
 const kafkajs = new Kafka({
@@ -359,28 +355,48 @@ const kafkajs = new Kafka({
 })
 
 let CONNECTION = false;
-
-const continuousDataQueue = [];
-let sendDataQueue = [];
+var Queue = require('queue-fifo');
+var predictDataQueue = new Queue();
+var preProcessedDataQueue = new Queue();
+// const continuousDataQueue = [];
+// let sendDataQueue = [];
+const FifoQueue =  require('./js/FifoQueue');
 
 const consumerjs = kafkajs.consumer({ groupId: 'forScichart' })
+
+var preprocessedQ = new FifoQueue(200000)
+var detectionQ = new FifoQueue(200000)
  
 const run = async () => {
   // Consuming
   await consumerjs.connect()
-  await consumerjs.subscribe({ topic: 'MH001001001-CNC001-preprocessed', fromBeginning: false }) // (전처리데이터) 실제 데이터
+  await consumerjs.subscribe({ topic: 'MH001001001-CNC001', fromBeginning: false }) // (전처리데이터) 실제 데이터
   await consumerjs.subscribe({ topic: 'MH001001001-CNC001-detection', fromBeginning: false }) // 판정, loss (예측)
  
   await consumerjs.run({
     eachMessage: async ({ topic, partition, message }) => {
       // console.log('kafka alive')
       app.io.emit('isWork');
-      continuousDataQueue.push(message.value.toString())
-      sendDataQueue.push(continuousDataQueue[0])
-      continuousDataQueue.shift()
-      if(sendDataQueue.length >= 1000) {
-        sendDataQueue.shift()
+      // console.log(topic, " ", message.value.toString())
+      switch(topic) {
+        case 'MH001001001-CNC001':
+          preprocessedQ.enqueue(message.value.toString());
+          preProcessedDataQueue.enqueue(message.value.toString());
+          // console.log('original data ', message.value.toString())
+          // console.log('preprocessed');
+          break;
+        case 'MH001001001-CNC001-detection':
+          detectionQ.enqueue(message.value.toString());
+          predictDataQueue.enqueue(message.value.toString());
+          // console.log('detection');
+          break;
       }
+      // continuousDataQueue.push(message.value.toString())
+      // sendDataQueue.push(continuousDataQueue[0])
+      // continuousDataQueue.shift()
+      // if(sendDataQueue.length >= 1000) {
+      //   sendDataQueue.shift()
+      // }
     },
   })
 }
@@ -391,33 +407,72 @@ run().catch(console.error)
 // web socket connection
 
 var WebSocket = require('ws').Server;
-const e = require('express');
 var wss = new WebSocket({ port: 3000 });
+var preProcessedData = ""
+var predictData = ""
 
-wss.on('connection', function(ws) {
+wss.on('connection', function(ws, req) {
+  let ip = ws._socket.remoteAddress
+
+  console.log(ip + " send you message to connect");
+
   ws.on('message', function(message) {
-    // const sendData = {
-    //   event: 'response',
-    // };
-    // ws.send(JSON.stringify(sendData))
-    let resData = JSON.parse(message);
-    switch(resData.event) {
-      case 'open':
-        console.log(message);
+    console.log(ip + " : " + message);
+    type = JSON.parse(message).type;
+
+    switch(type) {
+      case 'preprocessed':
+        ws.interval = setInterval(() => {
+          if (ws.readyState === ws.OPEN) {
+              // console.log('pre ',preProcessedDataList)
+              preProcessedData = mkList(preProcessedDataQueue)
+              if (preProcessedData != 0) {
+                console.log('Preprocessed Data 메시지 전송: ', preProcessedData.length)
+
+                // console.log('end ',preProcessedDataList)
+                // console.log(preProcessedData)
+                ws.send(preProcessedData);
+              }
+          }
+        }, 500);
         break;
-      case 'request':
-        console.log(message)
-        const sendData = {
-          event: 'sendData',
-          data: sendDataQueue
-        };
-        console.log("sendDataQueue.length : ", sendDataQueue.length)
-        sendDataQueue = [];
-        ws.send(JSON.stringify(sendData));
-        break;
-      case 'close':
-        console.log("close")
+
+      case 'predict':
+        ws.interval = setInterval(() => {
+          if (ws.readyState === ws.OPEN) {
+            predictData = mkList(predictDataQueue)
+            if (predictData != 0) {
+              console.log('Predict Data 메시지 전송', predictData.length)
+              ws.send(predictData)
+            }
+          }
+        }, 500);
         break;
     }
   });
+  ws.on('error', function(error) {
+    console.log(ip + "error on connection, " + error);
+  })
+
+  ws.on('close', function() {
+    console.log(ip + " closed connection");
+    clearInterval(ws.interval);
+  })
 });
+
+function  mkList(queue) {
+  if (queue.size() == 0){
+    return 0;
+  }
+  let data = "";
+  let end = (queue.size() > 1000) ? 1000 : queue.size();
+  for (let i = 0; i < end; i++){
+    if (i == 0) {
+      data = queue.dequeue();
+    } else {
+      data = data + "\n" + queue.dequeue();
+    }
+  }
+  return data;
+}
+*/

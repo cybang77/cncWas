@@ -16,3 +16,6 @@
 .webgl-content .footer .webgl-logo {background-image: url('webgl-logo.png'); width: 204px; float: left;}
 .webgl-content .footer .title {margin-right: 10px; float: right;}
 .webgl-content .footer .fullscreen {background-image: url('fullscreen.png'); width: 38px; float: right;}
+
+#unity-container{height: 100%; width: 100%;} /* unity-container의 width랑 height 100%로 맞추려고 설정 */
+canvas {height: 100%; width: 100%;} /* unity-canvas의 width랑 height 100%로 맞추려고 설정 */
