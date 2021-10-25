@@ -6,7 +6,7 @@ exports.timestampTodate = function (timestamp) {
 }
 
 exports.timestampTotime = function (timestamp) {
-  miliTime = parseFloat(timestamp);
+  miliTime = parseFloat(timestamp)/1000;
   let min = parseInt(miliTime / 60);
   let sec = miliTime % 60;
 
