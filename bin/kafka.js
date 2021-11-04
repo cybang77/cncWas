@@ -2,7 +2,7 @@ const app = require('../app');
 const { Kafka } = require('kafkajs');
  
 const kafkajs = new Kafka({
-  clientId: 'forScichart',
+  clientId: 'forScichart22',
   brokers: ['9.8.100.152:9092']
 })
 

@@ -6,7 +6,9 @@ app.hnlib = require('./js/hnLibrary')
 
 // create http server
 var server = http.createServer(app);
-server.listen(8082);
+
+// 포트 설정
+server.listen(8087);
 server.on('error', onError);
 server.on('listening', onListening);
 
@@ -30,6 +32,7 @@ function onError(error) {
   }
 }
 
+//강제 종료시 메시지
 process.on('SIGINT', function() {
   console.log( "\nGracefully shutting down from SIGINT (Ctrl-C)" );
   process.exit(1);
@@ -42,14 +45,5 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
-
-function optionClone(obj) {
-  var output = {};
-  for (let i in obj) {
-    output[i] = obj[i];
-  }
-  return output;
-}
-
 
 module.exports = server;

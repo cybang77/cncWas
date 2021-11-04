@@ -4,23 +4,17 @@ var app = require('../app')
 var io = require('socket.io');
 var monent = require('moment');
 
-// const { InfluxDB } = require('@influxdata/influxdb-client');
 const config = require( './config/config.js')
-// const influx = new InfluxDB(config.influxdb)
 const Influx = require('influx');
 const influx = new Influx.InfluxDB(config.influxdb)
+app.influxdb = influx
 
 app.lossSum = 0;
 app.lossCount = 1;
 app.lossCollection = [];
 app.work = 'stop'
 
-// var server = https.createServer(credentials, app);
-app.influxdb = influx
-// app.influxQuery = app.influxdb.getQueryApi('HN')
-
 app.io = io(server, {
-    // cors: { origin: "*" }
     cors: {
       origin: "*",
       methods: ["GET", "POST"]
@@ -45,6 +39,8 @@ app.io = io(server, {
   // connection시 인증 params
   app.io.on('connection', (socket) => {
     console.log("connected!!!!!!!!!", socket.id)
+
+    // 현재까지 생산된 제품의 총 갯수
     socket.on('setCount', () => {
       influx.query(`SELECT count("cycleTime") AS "count_cycleTime" FROM "cycle_info"`).then(result => {
         app.totalCount = parseInt(result[0]["count_cycleTime"]);
@@ -53,41 +49,21 @@ app.io = io(server, {
         socket.emit('count', 'internal error');
         console.error("[setCount] check your code or query.");
       });
-      // app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start:0)|> filter(fn: (r) => r["_measurement"] == "OP10-3")|> filter(fn: (r) => r["_field"] == "count") |> count(column: "_value")`, {
-      //   app.influxQuery.queryRows(`SELECT count("cycleTime") AS "count_cycleTime" FROM "MH001001001-CNC001"."autogen"."cycle_info"`, {
-      //   next(row, tableMeta) {
-      //     const o = tableMeta.toObject(row)
-      //     console.log(o)
-      //     app.totalCount = o._value
-      //     // socket.emit('count', app.totalCount)
-      //     console.log("aaa ",totalCount)
-      //   }, error(error) {
-      //     console.error(error)
-      //   }, complete() {
-      //   },
-      // })
     });
+    
+    // 현재 까지 생산된 제품의 평균 CT
     socket.on('setMeanCycleTime', () => {
-      influx.query(`SELECT mean("cycleTime") AS "mean_cycleTime" FROM "cycle_info"`).then(result => {
+      influx.query(`SELECT mean("cycleTime") AS "mean_cycleTime" FROM "cycle_info" where time > now()-20m`).then(result => {
         const mean = app.hnlib.timestampTotime(result[0]["mean_cycleTime"])
         socket.emit('cycleTimeMean', mean);
       }).catch(err => {
         socket.emit('cycleTimeMean', 'internal error');
         console.error("[setMeanCycleTime] check your code or query.");
       });
-      // app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: 0) |> filter(fn: (r) => r["_measurement"] == "OP10-3")
-      //     |> filter(fn: (r) => r["_field"] == "cycleTime")   |> movingAverage(n: 5) |> last()`, {
-      //   next(row, tableMeta) {
-      //     const o = tableMeta.toObject(row)
-      //     socket.emit('cycleTimeMean', o._value)
-      //   }, error(error) {
-      //     console.error(error)
-      //   }, complete() {
-      //     console.log('set mean process time')
-      //   },
-      // });
     });
   
+    // 일, 주, 월 별 생산 된 제품 갯수를 보냄
+    // group by time(1M), group by time(1w)의 경우 flux만 지원되어서 InfluxQL을 사용해야하는 현재는 직접 연산.
     socket.on('setCountsHistory', () => {
       let day = ""
       let week = ""
@@ -113,124 +89,30 @@ app.io = io(server, {
         day = day.slice(0, -1);
         socket.emit('days', day);
         socket.emit('weeks', week);
-        // socket.emit('months', month);gudt
 
-        console.log(day)
-        console.log("=========================================================")
-        console.log(week)
-        // socket.emit('days', mean);
       }).catch(err => {
         socket.emit('days', 'internal error');
         console.error("[setCount1Day] check your code or query.");
       });
-      // let day = []
-      // let cnt = 0
-      // let week = []
-      // let weeknumber;
-      // let startweek;
-      // app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: 0) |> timeShift(duration: 9h, columns: ["_time"]) |> filter(fn: (r) => r["_measurement"] == "OP10-3") 
-      //                         |> filter(fn: (r) => r["_field"] == "count") |> aggregateWindow(every: 1d, fn: count, createEmpty: false)`, {
-      //   next(row, tableMeta) {
-      //     const o = tableMeta.toObject(row)
-      //     t = o._time.split('T')[0]
-      //     day[cnt] = { date: t, count: o._value }
-      //     cnt++;
-      //     app.todayCount = o._value
-      //   }, error(error) {
-      //     console.error(error)
-      //   }, complete() {
-      //     for (let i = 0; i < day.length - 1; i++) {
-      //       day[i].date = app.hnlib.InfluxAggregationTimeBug(day[i].date);
-      //     }
-      //     socket.emit('days', day)
-  
-      //     if (typeof (day) != "undefined") {
-      //       for (let i = 0; i < day.length; i++) {
-      //         if (typeof (day[i]) != 'undefined') {
-      //           weeknumber = moment(day[i].date, "YYYY-MM-DD").isoWeek();
-      //           lastweek = moment(day[day.length - 1].date, "YYYY-MM-DD").isoWeek();
-      //           if (i == 0) {
-      //             startweek = weeknumber;
-      //             for (let j = 0; j < lastweek - startweek + 1; j++) {
-      //               week[j] = { date: moment('2021'+(startweek+j), 'YYYYWW').format('YYYY-MM-DD'), count: 0 };
-      //               // console.log(day[i].date)
-      //             }
-      //           }
-      //           // week[weeknumber - startweek].date = day[i].date
-      //           week[weeknumber - startweek].count = day[i].count + week[weeknumber - startweek].count;
-      //         }
-      //       }
-      //     }
-      //     socket.emit('weeklys', week)
-      //   },
-      // });
     });
-    socket.on('setCount1Month', () => {
-      var mon = []
-      cnt = 0;
-      // app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: 0) |> timeShift(duration: 9h, columns: ["_time"]) |> filter(fn: (r) => r["_measurement"] == "OP10-3") 
-      //                         |> filter(fn: (r) => r["_field"] == "count") |> aggregateWindow(every: 1mo, fn: count, createEmpty: false)`, {
-      //   next(row, tableMeta) {
-      //     const o = tableMeta.toObject(row)
-      //     t = o._time.split('T')[0]
-      //     mon[cnt] = { date: t, count: o._value }
-      //     cnt++;
-      //   }, error(error) {
-      //     console.error(error)
-      //   }, complete() {
-      //     for (let i = 0; i < mon.length; i++) {
-      //       if (typeof (mon[i]) == 'undefined') {
-      //         mon = mon.slice(i + 1, mon.length)
-      //       }
-      //     }
-      //     socket.emit('monthlys', mon);
-      //   },
-      // });
-    });
+
+    // 최근 100개의 사이클 리스트 보냄
     socket.on('setCycleTimeList', () => {
-      // let result_s = []
-      // let result_e = []
-      // let result_t = []
-      // count1 = 0
-      // count2 = 0
-      // count3 = 0
-      // let history = [];
-      // let lineHistory = [[], []]
-      // app.influxQuery.queryRows(`from(bucket: "cycle_info") |> range(start: -4d) |> filter(fn: (r) => r["_measurement"] == "OP10-3") |> tail(n: 100)`, {
-      //   next(row, tableMeta) {
-      //     const o = tableMeta.toObject(row)
-      //     if (o._field == 'startTime') {
-      //       result_s[count1] = o._value;
-      //       count1++;
-      //     }
-      //     if (o._field == 'endTime') {
-      //       result_e[count2] = o._value;
-      //       count2++;
-      //     }
-      //     if (o._field == 'cycleTime') {
-      //       result_t[count3] = o._value / 1000;
-      //       count3++;
-      //     }
-      //   }, error(error) {
-      //     console.error(error)
-      //   }, complete() {
-      //     let i = 0
-      //     for (i; i < result_s.length; i++) {
-      //       if (typeof (result_s[i]) != 'undefined') {
-      //         lineHistory[0][i] = result_e[i]
-      //         lineHistory[1][i] = result_t[i];
-      //         history[i] = { start: result_s[i], end: result_e[i], ct: app.hnlib.timestampTotime(result_t[i]) }
-      //       }
-      //     }
-      //     if (i == result_s.length) {
-      //       socket.emit('ctHistory', history)
-      //       lineHistory[0] = lineHistory[0].slice(lineHistory[0].length - 10, lineHistory[0].length)
-      //       lineHistory[1] = lineHistory[1].slice(lineHistory[1].length - 10, lineHistory[1].length)
-      //       socket.emit('ctChart', lineHistory);
-      //     }
-      //   },
-      // });
+      let ctList = "";
+      influx.query(`SELECT "cycleTime" FROM "MH001001001-CNC001"."autogen"."cycle_info" ORDER BY DESC limit 100`).then(result => {
+        for(let i=0; i< result.length; i++){
+          ctList = ctList + result[i]["time"]["_nanoISO"].replace("T", " ").split(".")[0] + "," + result[i]["cycleTime"] + "\n";
+        }
+        ctList = ctList.slice(0, -1);
+        console.log(ctList)
+        socket.emit('ctChart', ctList);
+      }).catch(err => {
+        socket.emit('ctChart', 'internal error');
+        console.error("[setCycleTimeList] check your code or query.");
+      });
     });
+
+    // ================================================================ 협 의 중 ================================================================
     socket.on('currentModelInfo', () => {
       // console.log("예지")
       // socket.emit('nowModelInfo', {model: 'prediction_bi', processCnt: 4});
@@ -316,18 +198,9 @@ app.io = io(server, {
         socket.emit('qualityPredictEnd', app.predicInfo)
       }
     });
-  
-    // socket.on('streamRaw', () => {
-    //   // console.log('streamRaw')
-    //   setInterval(() => {
-    //     if(rawList.length > 0) {
-    //       // 전송
-    //       console.log("raw")
-    //       socket.emit('returnStreamRaw', rawList.shift().join(","))  
-    //     }
-    //   }, 10)
-    // });
-  
+    // ================================================================================================================================
+
+    // scichart에 실시간으로 카프카에서 받은 데이터 보냄.
     socket.on('streamPredict', () => {
       // console.log('streamPredict')
       socket.interval = setInterval(() => {
@@ -354,14 +227,16 @@ app.io = io(server, {
         }
       }, 1000)
     });
-  
+
+    // 연결 끊김
     socket.on("disconnect", () => {
       if (socket.interval != undefined){
         clearInterval(socket.interval);
       }
       socket.disconnect();
     });
-  
+
+    // 연결시 에러
     socket.on("error", () => {
       if (socket.interval != undefined){
         clearInterval(socket.interval);
