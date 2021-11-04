@@ -2,6 +2,7 @@ var server = require('./www')
 require('./kafka')
 var app = require('../app')
 var io = require('socket.io');
+var monent = require('moment');
 
 // const { InfluxDB } = require('@influxdata/influxdb-client');
 const config = require( './config/config.js')
@@ -87,14 +88,36 @@ app.io = io(server, {
       // });
     });
   
-    socket.on('setCount1Day', () => {
+    socket.on('setCountsHistory', () => {
       let day = ""
+      let week = ""
+      let weeks = new Array(53).fill(0);
+      let endWeek = 0;
       influx.query(`SELECT count("cycleTime") AS "count_a_day_cycleTime" FROM "cycle_info" GROUP BY time(1d)`).then(result => {
+        const startWeek = monent(result[0]["time"]["_nanoISO"].split("T")[0], "YYYY-MM-DD").isoWeek();
+        endWeek = startWeek;
+        week = week + result[0]["time"]["_nanoISO"].split("T")[0] + ","; 
         for(let i=0; i< result.length; i++){
-          day = day + result[i]["time"]["_nanoISO"].split("T")[0] +"," +result[i]["count_a_day_cycleTime"]+"\n";
+          const date = result[i]["time"]["_nanoISO"].split("T")[0];
+          const count = result[i]["count_a_day_cycleTime"];
+          const w = monent(date, "YYYY-MM-DD").isoWeek()
+          day = day + date +"," +count+"\n";
+          weeks[w] = weeks[w] + parseInt(count);
+          if (w != endWeek) {
+            week = week + weeks[endWeek]+"\n" + date + ",";
+          }
+          endWeek = w;
         }
+        week = week + weeks[endWeek];
+
         day = day.slice(0, -1);
+        socket.emit('days', day);
+        socket.emit('weeks', week);
+        // socket.emit('months', month);gudt
+
         console.log(day)
+        console.log("=========================================================")
+        console.log(week)
         // socket.emit('days', mean);
       }).catch(err => {
         socket.emit('days', 'internal error');
@@ -309,23 +332,23 @@ app.io = io(server, {
       // console.log('streamPredict')
       socket.interval = setInterval(() => {
         let res = ""
-        let end = predictList.length
+        let end = app.predictList.length
   
-        predictList.sort(function(a,b) {
+        app.predictList.sort(function(a,b) {
           return a[1] - b[1];
         })
   
         // 1000개 이상 데이터 가지고 있으면~ 최대 1000개 묶어서 보냄
-        if(predictList.length > 1000) {
+        if(app.predictList.length > 1000) {
           for(let i=0; i< 1000; i++){
-            res += predictList.shift().join(",")+"\n"
+            res += app.predictList.shift().join(",")+"\n"
           }
           socket.emit('returnStreamPredict', res)  
         }
         // 1000개 이하 데이터는 전부 한번에 묶어서 보냄
-        else if(predictList.length > 0) {
+        else if(app.predictList.length > 0) {
           for(let i=0; i< end; i++){
-            res += predictList.shift().join(",")+"\n"
+            res += app.predictList.shift().join(",")+"\n"
           }
           socket.emit('returnStreamPredict', res)  
         }

@@ -1,6 +1,5 @@
 const app = require('../app');
 const { Kafka } = require('kafkajs');
-const { DH_UNABLE_TO_CHECK_GENERATOR } = require('constants');
  
 const kafkajs = new Kafka({
   clientId: 'forScichart',
@@ -8,8 +7,8 @@ const kafkajs = new Kafka({
 })
 
 // var predictQ = new FifoQueue(200000)
-var predictList = [];
-predictList.sort(function(a, b) {
+app.predictList = [];
+app.predictList.sort(function(a, b) {
   return parseInt(a[1], 10)-parseInt(b[1], 10);
 });
 
@@ -28,7 +27,7 @@ const run = async () => {
           app.io.emit('iswork');
           break;
         case 'MH001001001-CNC002-predict':
-          predictList.push(message.value.toString().trim().split(','))
+          app.predictList.push(message.value.toString().trim().split(','))
           break;
       }
     },
