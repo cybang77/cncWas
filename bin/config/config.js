@@ -15,6 +15,13 @@ config.modelChange = {
     port: 8080,
     path: '/process/prediction/',
     method: 'GET'
-  }
+}
+
+config.keyclock = {
+    "realm": "cyservice",
+    "auth-server-url": "http://9.8.100.153:8080/auth",
+    "ssl-required": "none",
+    "resource": "cybang"
+}
 
 module.exports = config;
