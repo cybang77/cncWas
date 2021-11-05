@@ -38,8 +38,6 @@ proto.heapify = function() {
     let index = this._buf.length - 1 // 계속해서 변하는 index 값
     const lastInsertedNode = this._buf[index]
 
-    console.log(typeof(lastInsertedNode))
-
     // while (index > 0) {
     //     const parentIndex = this.getParentIndex(index)
   

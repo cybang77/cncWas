@@ -37,7 +37,6 @@ exports.TokenCheck = (arg) => {
         res = { res: false, code: 403, message: { "result": "Unexpected Error", "errormessage": "get_access_token", "hnerrorcode": 'E005' } };
       }
     } else {
-      // console.log(decoded);
       //realm check
       if (!decoded.iss.includes('cyservice')) {
         res = { res: false, code: 401, message: { "result": "Invalid Request", "errormessage": "not_found_realm", "hnerrorcode": 'E006' } };
@@ -50,7 +49,6 @@ exports.TokenCheck = (arg) => {
       if (decoded.resource_access.was.roles[0] != 'admin') {
         res = { res: false, code: 402, message: { "result": "Invalid Access Token", "errormessage": "invalid_access_token", "hnerrorcode": 'E008' } };
       }
-      // console.log("check")
       res = { res: true, code: 200, message: { "result": "success" } };
     }
   });

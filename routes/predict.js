@@ -9,20 +9,13 @@ const __public = path.join(__dirname, '../public/predictImg/');
 
 /* GET home page. */
 router.get('/start', (req, res) => {
-  // 예지한테 판정 작한다고 보내기
+  // UI에 판정 작한다고 보내기
   let opData = {op: req.query.opcode, sn: req.query.sn}
   req.app.io.emit('qualityPredictStart', opData);
-  // console.log('predict start::: ', req.query.opcode) //json opcode, sn 처리
-  // console.log('predict start::: ', req.query.sn) //json opcode, sn 처리
-  // // console.log('predict start::: ', res.query)
   res.status(200).send() // 200 code send 
 });
 
 router.post('/end',(req, res, next) => {
-  // console.log('predict end::: ', req.query.opcode)
-  // console.log('predict end::: ', req.query.sn)
-  // console.log('predict end::: ', req.query.acc)
-  // console.log('predict end::: ', req.query.predict)
   let fstream;
   let opData;
   req.pipe(req.busboy);

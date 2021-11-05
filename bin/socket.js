@@ -104,7 +104,6 @@ app.io = io(server, {
           ctList = ctList + result[i]["time"]["_nanoISO"].replace("T", " ").split(".")[0] + "," + result[i]["cycleTime"] + "\n";
         }
         ctList = ctList.slice(0, -1);
-        console.log(ctList)
         socket.emit('ctChart', ctList);
       }).catch(err => {
         socket.emit('ctChart', 'internal error');
@@ -114,8 +113,6 @@ app.io = io(server, {
 
     // ================================================================ 협 의 중 ================================================================
     socket.on('currentModelInfo', () => {
-      // console.log("예지")
-      // socket.emit('nowModelInfo', {model: 'prediction_bi', processCnt: 4});
       let option = optionClone(config.modelChange)
       option.path = option.path + 'info'
       http.get(option, function (res) {
@@ -123,9 +120,7 @@ app.io = io(server, {
           chunk = chunk.toString('utf8');
           if (chunk.length > 10) {
             chunk = JSON.parse(chunk);
-            // chunk[0].name = chunk[0].name.split('_')[1]
             socket.emit('nowModelInfo', { model: chunk[0].name, processCnt: chunk.length });
-            // console.log('nowModelInfo', { model: chunk[0].name, processCnt: chunk.length })
           } else {
             console.log("stop 상태")
           }
