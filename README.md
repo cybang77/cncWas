@@ -252,12 +252,9 @@
 │   └── www.js
 ├── node_modules
 ├── package.json
-├── public
 ├── routes
 │   ├── predict.js
 │   └── main.js
-├── views
-├── sprint1 API and Socket specification.docx
 └── README.md
 ```
 
