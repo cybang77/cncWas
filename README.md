@@ -7,25 +7,14 @@
 * npm 6.14.12 
 ## 2. was 기동 방법
 1. npm install
-2. DEBUG=cnc-was:* npm start
-## 3. 기동 후 UI
-![image](https://user-images.githubusercontent.com/33340094/140264526-04422736-e1d3-47e3-914e-a7a73f01d726.jpg)
-[UI source & Readme](https://github.com/yeji3999/cncPrj)
+2. npm run start
 
-## 4. API 명세서 - version: 3.0.0  
-<h3>4-1. REST API Summary  </h3>
+## 3. API 명세서 - version: 3.0.1  
+<h3>3-1. REST API Summary  </h3>
 <table>
     <tr>
         <th>Method and URI</th>
         <th>Description</th>
-    </tr>
-    <tr>
-        <td>Get /main/work-drop</td>
-        <td>작업 중단</td>
-    </tr>
-    <tr>
-        <td>Get /main/cycle-info?{startTime}&{endTime} &{opcode}&{count}&{cycleTime}</td>
-        <td>가동 현황</td>
     </tr>
     <tr>
         <td>Get /main/real-time-loss?{loss}</td>
@@ -42,36 +31,6 @@
 
 </table>
 
-* ### 작업 중단 GET /main/work-drop
-    ---
-
-    ***Request Parameters***  
-    None  
-    ***Response***  
-    작업 중단시 AI 판정 UI reset. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
-    ***Success Example:***  
-    {  
-    OK  
-    }  
-* ### 가동 현황 GET /main/cycle-info</h3>
-    ---
-
-    ***Request Parameters***  
-
-    |     Parameter    |     Type       |     Desctiption                       |
-    |:------------------|:----------------|:---------------------------------------|
-    |     opCode       |     string     |     가공 코드                         |
-    |     startTime    |     string     |     timstamp형식으로 ns까지   표기    |
-    |     endTime      |     string     |     timstamp형식으로 ns까지 표기      |
-    |     count        |     integer    |     오직 1만 가능                     |
-    |     cycleTime    |     float      |     가공 시간                         |  
-
-    ***Response***  
-    한 공정이 끝날 때 마다 가동 현황 update. 요청이 성공적으로 서버에 전달되면 200 OK를 반환합니다.  
-    ***Success Example:***  
-    {  
-    OK  
-    }  
 * ### 실시간 loss율 GET /main/real-time-loss
     ---
 
@@ -122,7 +81,7 @@
     }  
 <br/>
 
-### 4-2. Socket IO Summary
+### 3-2. Socket IO Summary
 
 <table>
     <tr>
