@@ -10,9 +10,9 @@
 2. DEBUG=cnc-was:* npm start
 ## 3. 기동 후 UI
 ![image](https://user-images.githubusercontent.com/33340094/140264526-04422736-e1d3-47e3-914e-a7a73f01d726.jpg)
-[UI source & Readme](https://github.com/yeji3999/cncPrj/tree/sprint1)
+[UI source & Readme](https://github.com/yeji3999/cncPrj)
 
-## 4. API 명세서 - version: 1.0.0  
+## 4. API 명세서 - version: 3.0.0  
 <h3>4-1. REST API Summary  </h3>
 <table>
     <tr>
@@ -289,7 +289,7 @@
 │   ├── js
 │   │   └──hnLibrary.js
 │   ├── kafka.js
-│   ├── socket.js
+│   ├── socket.js   *진입점*
 │   └── www.js
 ├── node_modules
 ├── package.json
@@ -306,7 +306,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- config: 설정 정보<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- js: timestamp를 date로 변환해주는 라이브러리 및 추후 라이브러리가 모여질 디렉토리<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- www: http 서버 선언<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- socket: socet 연결 및 구현 정보<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- socket: socket 연결 및 구현 정보&nbsp;&nbsp;&nbsp;&nbsp; <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- kafka: kafka 선언 및 consumer 정의<br>
 * public: UI 빌드 후 저장되는 경로
 * routes: 라우팅에 관련되어 정의되어있는 디렉토리

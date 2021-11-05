@@ -8,7 +8,7 @@ app.hnlib = require('./js/hnLibrary')
 var server = http.createServer(app);
 
 // 포트 설정
-server.listen(8087);
+server.listen(8082);
 server.on('error', onError);
 server.on('listening', onListening);
 
