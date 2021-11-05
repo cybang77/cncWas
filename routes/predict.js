@@ -1,7 +1,7 @@
 var express = require('express');
 const { NotExtended } = require('http-errors');
 var router = express.Router();
-const {Point} = require('@influxdata/influxdb-client');
+// const {Point} = require('@influxdata/influxdb-client');
 const hnlib = require('../bin/js/hnLibrary');
 const fs = require('fs');
 var path = require('path');

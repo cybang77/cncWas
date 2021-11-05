@@ -1,7 +1,7 @@
 var express = require('express');
 const { NotExtended } = require('http-errors');
 var router = express.Router();
-const {Point} = require('@influxdata/influxdb-client');
+// const {Point} = require('@influxdata/influxdb-client');
 const hnlib = require('../bin/js/hnLibrary');
 const hnAuth = require("../bin/js/hnAuth");
 const app = require('../app');
@@ -23,10 +23,10 @@ router.get('/cycle-info', (req, res, next) => {
       res.status(valiedToken.code).send(valiedToken.message);
       let start = hnlib.timestampTodate(req.query.startTime)
       let end = hnlib.timestampTodate(req.query.endTime)
-      influxWriteApi = req.app.influxdb.getWriteApi('HN', 'cycle_info', 'ns')
-      point = new Point(req.query.opCode).stringField('startTime', start).stringField('endTime', end).intField('count', req.query.count).intField('cycleTime', req.query.cycleTime)//.stringField('S/N', SN)
-      influxWriteApi.writePoint(point);
-      influxWriteApi.close();
+      // influxWriteApi = req.app.influxdb.getWriteApi('HN', 'cycle_info', 'ns')
+      // point = new Point(req.query.opCode).stringField('startTime', start).stringField('endTime', end).intField('count', req.query.count).intField('cycleTime', req.query.cycleTime)//.stringField('S/N', SN)
+      // influxWriteApi.writePoint(point);
+      // influxWriteApi.close();
       req.app.totalCount += 1;
       req.app.todayCount += 1;
       req.app.io.emit('days', req.app.todayCount);
