@@ -1,19 +1,20 @@
-var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-const mainRouter = require('./routes/main');
-const predictRouter = require('./routes/predict');
-const root = `${__dirname}/public`;
-const cookieParser = require('cookie-parser');
-var history = require('express-history-api-fallback');
+const spindleloadRouter = require('./routes/spindleload');
+const qualityRouter = require('./routes/quality');
 const busboy = require('connect-busboy');
+const config = require( './bin/config/config.js')
+const Influx = require('influx');
+const influx = new Influx.InfluxDB(config.influxdb);
 
 var app = express();
 app.use(express.json());
-app.use(cookieParser());
 app.use(busboy())
 
-app.use('/main', mainRouter);
-app.use('/quality', predictRouter);
+app.use('/spindleload', spindleloadRouter);
+app.use('/quality', qualityRouter);
+
+// 전역 변수를 사용하기 위한 버퍼 프로퍼티 선언
+app.buf = new Object();
+app.influxdb = influx;
 
 module.exports = app;

@@ -3,19 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/socket",
-    "debug": "nodemon --inspect ./bin/socket"
+    "start": "nodemon ./bin/www",
+    "debug": "nodemon --inspect ./bin/www"
   },
   "dependencies": {
-    "@flood/node-influx": "^5.0.9",
     "connect-busboy": "0.0.2",
-    "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-history-api-fallback": "^2.2.1",
     "express-session": "^1.17.2",
     "http-errors": "~1.6.3",
-    "influx": "^5.9.0",
+    "influx": "^5.9.2",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
     "kafkajs": "^1.15.0",

@@ -11,7 +11,7 @@ const __public = path.join(__dirname, '../public/predictImg/');
 router.get('/start', (req, res) => {
   // UI에 판정 작한다고 보내기
   let opData = {op: req.query.opcode, sn: req.query.sn}
-  req.app.io.emit('qualityPredictStart', opData);
+  req.app.io.emit('judgeQualityStart', opData);
   res.status(200).send() // 200 code send 
 });
 
@@ -36,7 +36,7 @@ router.post('/end',(req, res, next) => {
     });
     fstream.on('finish', function () {
       console.log('저장완료')
-      req.app.io.emit('qualityPredictEnd', opData);
+      req.app.io.emit('judgeQualityEnd', opData);
     });
   });
   //  파일 처리 
